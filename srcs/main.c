@@ -31,8 +31,8 @@ void	init_var(t_disp *d, int i)
 	if (!(d->mlx = mlx_init()))
 		exit(printf("Error\n"));
 	if (!(d->win = mlx_new_window(d->mlx, WIDTH, HEIGHT, "Fractol ncoursol"))
-			|| !(d->pic = mlx_new_image(d->mlx, WIDTH, HEIGHT))
-			|| !(d->img = mlx_get_data_addr(d->pic, &d->bpp, &d->sl, &d->end)))
+		|| !(d->pic = mlx_new_image(d->mlx, WIDTH, HEIGHT))
+		|| !(d->img = mlx_get_data_addr(d->pic, &d->bpp, &d->sl, &d->end)))
 		exit(printf("Error\n"));
 	d->choice = i;
 	d->lock = 1;
@@ -262,11 +262,11 @@ void	move(t_disp *d, int key, int x, int y)
 		if (x <= WIDTH / 2)
 			d->p.move_x += ((WIDTH / 2) - x);
 		else
-			d->p.move_x += (x);
+			d->p.move_x += x;
 		if (y <= HEIGHT / 2)
-			d->p.move_y += 1;
+			d->p.move_y += y;
 		else
-			d->p.move_y += 1;
+			d->p.move_y += ((HEIGHT / 2) - y);
 	}
 }
 
