@@ -164,7 +164,7 @@ void	color(t_disp *d, int n)
 	else
 	{
 		c = -(log(mathFct(d->p.xn, d->p.yn)) / log(2)) + n + 1;
-		d->img[i] = (int)(c * 3) % 256;
+		d->img[i] = 0x00;
 		d->img[i + 1] = (int)(c * 2) % 256;
 		d->img[i + 2] = (int)(c * 1) % 256;
 		d->img[i + 3] = 0xFF;
@@ -177,7 +177,9 @@ void	fract_var(t_disp *d)
 	d->p.xmin = (d->p.move_x + d->p.xmin) * d->p.zoom;
 	d->p.ymax = (d->p.move_y + d->p.ymax) * d->p.zoom;
 	d->p.ymin = (d->p.move_y + d->p.ymin) * d->p.zoom;
-
+	d->p.move_x = 0;
+	d->p.move_y = 0;
+	d->p.zoom = 1;
 }
 
 void	draw(t_disp *d)
@@ -245,28 +247,20 @@ void	move(t_disp *d, int key, int x, int y)
 	double		totalx;
 	double		totaly;
 	
-	totalx = fabs(d->p.xmax) + fabs(d->p.xmin);
-	totaly = fabs(d->p.ymax) + fabs(d->p.ymin);
 	if (key == UP || key == DOWN)
 	{
-		d->p.move_y += (totaly / 10) * (key == UP ? 1 : -1);
+		totaly = fabs(d->p.ymax) + fabs(d->p.ymin);
+		d->p.move_y += (totaly * 0.09) * (key == UP ? 1 : -1);
 		threads(d);
 	}
 	else if (key == LEFT || key == RIGHT)
 	{
-		d->p.move_x += (totalx / 10) * (key == LEFT ? -1 : 1);
+		totalx = fabs(d->p.xmax) + fabs(d->p.xmin);
+		d->p.move_x += (totalx * 0.09) * (key == LEFT ? -1 : 1);
 		threads(d);
 	}
-	else
+	else if (key == WHEELUP || key == WHEELDOWN)
 	{
-		if (x <= WIDTH / 2)
-			d->p.move_x += ((WIDTH / 2) - x);
-		else
-			d->p.move_x += x;
-		if (y <= HEIGHT / 2)
-			d->p.move_y += y;
-		else
-			d->p.move_y += ((HEIGHT / 2) - y);
 	}
 }
 

@@ -73,8 +73,6 @@ typedef struct		s_disp
 	int				end;
 	int				nb;
 	int				lock;
-	int				last_x;
-	int				last_y;
 	struct s_coord	screen;
 	struct s_param	p;
 }					t_disp;
