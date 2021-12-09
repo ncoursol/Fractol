@@ -38,43 +38,41 @@
 
 typedef struct		s_coord
 {
-	int				x;
-	int				y;
-}					t_coord;
+	double					x;
+	double					y;
+}									t_coord;
 
 typedef struct		s_param
 {
-	double			xmax;
-	double			ymax;
-	double			xmin;
-	double			ymin;
-	double			x;
-	double			y;
-	double			xn;
-	double			yn;
-	double			zoom;
-	double			move_x;
-	double			move_y;
-	int				mult;
-	int				iter;
-}					t_param;
+	double					xmax;
+	double					ymax;
+	double					xmin;
+	double					ymin;
+	double					x;
+	double					y;
+	double					xn;
+	double					yn;
+	double					zoom;
+	double					mult;
+	int							iter;
+}									t_param;
 
 typedef struct		s_disp
 {
-	void			*mlx;
-	void			*win;
-	void			*pic;
-	char			*img;
-	pthread_t		th;
-	int				count;
-	int				choice;
-	int				bpp;
-	int				sl;
-	int				end;
-	int				nb;
-	int				lock;
+	void						*mlx;
+	void						*win;
+	void						*pic;
+	char						*img;
+	pthread_t				th;
+	int							count;
+	int							choice;
+	int							bpp;
+	int							sl;
+	int							end;
+	int							nb;
+	int							lock;
 	struct s_coord	screen;
 	struct s_param	p;
-}					t_disp;
+}									t_disp;
 
 #endif
