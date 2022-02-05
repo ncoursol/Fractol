@@ -1,175 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ncoursol <ncoursol@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/31 13:41:11 by ncoursol          #+#    #+#             */
+/*   Updated: 2022/01/31 14:45:43 by ncoursol         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/fractol.h"
-
-void	end_program(t_disp *d)
-{
-	mlx_destroy_image(d->mlx, d->pic);
-	mlx_destroy_window(d->mlx, d->win);
-	exit(0);
-}
-
-void	menu()
-{
-
-}
-
-int		choice(char **argv)
-{
-	if (ft_strncmp("Julia", argv[1], 6) == 0)
-		return (JULIA);
-	else if (ft_strncmp("Mandelbrot", argv[1], 11) == 0)
-		return (MANDELBROT);
-	else
-		exit(printf("Usage : ./fractol [fractal_name]\n"));
-	return (0);
-}
-
-void	init_fract_var(t_disp *d)
-{
-	if (d->choice == JULIA)
-	{
-		d->p.xmax = 1.25;
-		d->p.xmin = -1.25;
-		d->p.ymax = 1.25;
-		d->p.ymin = -1.25;
-	}
-	else if (d->choice == MANDELBROT)
-	{
-		d->p.xmax = 0.5;
-		d->p.xmin = -2;
-		d->p.ymax = 1.25;
-		d->p.ymin = -1.25;
-	}
-}
-
-void	init_var(t_disp *d, int i)
-{
-	double		l;
-	double		t;
-
-	if (!(d->mlx = mlx_init()))
-		exit(printf("Error\n"));
-	if (!(d->win = mlx_new_window(d->mlx, WIDTH, HEIGHT, "Fractol ncoursol"))
-		|| !(d->pic = mlx_new_image(d->mlx, WIDTH, HEIGHT))
-		|| !(d->img = mlx_get_data_addr(d->pic, &d->bpp, &d->sl, &d->end)))
-		exit(printf("Error\n"));
-	d->choice = i;
-	d->lock = 1;
-	d->p.mult = 2;
-	d->p.zoom = 0.9;
-	d->p.xmax = 0;
-	d->p.xmin = 0;
-	d->p.ymax = 0;
-	d->p.ymin = 0;
-	d->p.iter = 50;
-	init_fract_var(d);
-	if (WIDTH > HEIGHT)
-	{
-		t = fabs(d->p.xmax) + fabs(d->p.xmin);
-		l = (WIDTH * t) / HEIGHT;
-		d->p.xmax = (fabs(d->p.xmax) + (l - t) / 2) * (d->p.xmax < 0 ? -1 : 1);
-		d->p.xmin = (fabs(d->p.xmin) + (l - t) / 2) * (d->p.xmin < 0 ? -1 : 1);
-	}
-	else
-	{
-		t = fabs(d->p.ymax) + fabs(d->p.ymin);
-		l = (HEIGHT * t) / WIDTH;
-		d->p.ymax = (fabs(d->p.ymax) + (l - t) / 2) * (d->p.ymax < 0 ? -1 : 1);
-		d->p.ymin = (fabs(d->p.ymin) + (l - t) / 2) * (d->p.ymin < 0 ? -1 : 1);
-	}
-}
-
-double	mathFct(double a, double b)
-{
-	return (log(a * a + b * b));
-}
-
-double distBtwTwoPts(double xa, double ya, double xb, double yb)
-{
-	return (sqrt(pow(xb - xa, 2) + pow(yb - ya, 2)));
-}
-
-int		mandelbrot(t_disp *d)
-{
-	int		n;
-	double	tmp_x;
-	int p;
-
-	d->p.x = (d->screen.x * (d->p.xmax - d->p.xmin) / WIDTH + d->p.xmin);
-	d->p.y = (d->screen.y * (d->p.ymin - d->p.ymax) / HEIGHT + d->p.ymax);
-	p = distBtwTwoPts(1 / 4, d->p.y, d->p.x, d->p.y);
-	if ((d->p.x >= p - 2 * (p * p) + 1 / 4)
-		|| (pow(d->p.x + 1, 2) + d->p.y * d->p.y >= 1 / 16)) {
-		d->p.xn = 0;
-		d->p.yn = 0;
-		n = 0;
-		while ((d->p.xn * d->p.xn + d->p.yn * d->p.yn) <= 4 && n < d->p.iter)
-		{
-			tmp_x = d->p.xn;
-			d->p.xn = tmp_x * tmp_x - d->p.yn * d->p.yn + d->p.x;
-			d->p.yn = 2 * tmp_x * d->p.yn + d->p.y;
-			n++;
-		}
-	}
-	else
-	{
-		n = d->p.iter;
-	}
-	return (n);
-}
-
-int		multibrot(t_disp *d)
-{
-	int		n;
-	double	tmp_x;
-
-	d->p.x = (d->screen.x * (d->p.xmax - d->p.xmin) / WIDTH + d->p.xmin);
-	d->p.y = (d->screen.y * (d->p.ymin - d->p.ymax) / HEIGHT + d->p.ymax);
-	d->p.xn = 0;
-	d->p.yn = 0;
-	n = 0;
-	while ((d->p.xn * d->p.xn + d->p.yn * d->p.yn) <= 4 && n < d->p.iter)
-	{
-		tmp_x = d->p.xn;
-		d->p.xn = pow((tmp_x * tmp_x + d->p.yn * d->p.yn), d->p.mult / 2) * cos(d->p.mult * atan2(d->p.yn, tmp_x)) + d->p.x;
-		d->p.yn = pow((tmp_x * tmp_x + d->p.yn * d->p.yn), d->p.mult / 2) * sin(d->p.mult * atan2(d->p.yn, tmp_x)) + d->p.y;
-		n++;
-	}
-	return (n);
-}
-
-int		julia(t_disp *d)
-{
-	int		n;
-	double	tmp_x;
-
-	d->p.xn = (d->screen.x * (d->p.xmax - d->p.xmin) / WIDTH + d->p.xmin);
-	d->p.yn = (d->screen.y * (d->p.ymin - d->p.ymax) / HEIGHT + d->p.ymax);
-	n = 0;
-	while ((d->p.xn * d->p.xn + d->p.yn * d->p.yn) <= 4 && n < d->p.iter)
-	{
-		tmp_x = d->p.xn;
-		d->p.xn = tmp_x * tmp_x - d->p.yn * d->p.yn + d->p.x;
-		d->p.yn = 2 * tmp_x * d->p.yn + d->p.y;
-		n++;
-	}
-	return (n);
-}
-
-int		redirect(t_disp *d)
-{
-	if (d->choice == JULIA)
-		return(julia(d));
-	if (d->choice == MANDELBROT && d->p.mult > 2 && d->p.mult < 7)
-		return (multibrot(d));
-	if (d->choice == MANDELBROT)
-		return (mandelbrot(d));
-	return (0);
-}
 
 void	color(t_disp *d, int n)
 {
 	int			i;
-	double		c;
+	int			c;
 
 	i = ((d->screen.x * (d->bpp / 8)) + (d->screen.y * d->sl));
 	if (n == d->p.iter)
@@ -181,11 +27,11 @@ void	color(t_disp *d, int n)
 	}
 	else
 	{
-		c = -(log(mathFct(d->p.xn, d->p.yn)) / log(2)) + n + 1;
-		d->img[i] = 0x00;
-		d->img[i + 1] = (int)(c * 2) % 256;
-		d->img[i + 2] = (int)(c * 3) % 256;
-		d->img[i + 3] = 0x4D;
+		c = -(log(math_fct(d->p.xn, d->p.yn)) / log(2)) + n + d->p.color_swap;
+		d->img[i] = sin(d->p.color_s * (c + d->p.color_b)) * 127.5 + 127.5;
+		d->img[i + 1] = sin(d->p.color_s * (c + d->p.color_g)) * 127.5 + 127.5;
+		d->img[i + 2] = sin(d->p.color_s * (c + d->p.color_r)) * 127.5 + 127.5;
+		d->img[i + 3] = 0x00;
 	}
 }
 
@@ -193,8 +39,12 @@ void	draw(t_disp *d)
 {
 	int		end;
 
-	end = ((d->nb + 1) * HEIGHT) / NB_THREAD;
-	d->screen.y = (HEIGHT / NB_THREAD) * d->nb;
+	end = 0;
+	if (NB_THREAD > 0)
+	{
+		end = ((d->nb + 1) * HEIGHT) / NB_THREAD;
+		d->screen.y = (HEIGHT / NB_THREAD) * d->nb;
+	}
 	while (d->screen.y < end)
 	{
 		d->screen.x = 0;
@@ -207,25 +57,19 @@ void	draw(t_disp *d)
 	}
 }
 
-void	clear(t_disp *d)
-{
-	mlx_destroy_image(d->mlx, d->pic);
-	d->pic = mlx_new_image(d->mlx, WIDTH, HEIGHT);
-	d->img = mlx_get_data_addr(d->pic, &d->bpp, &d->sl, &d->end);
-}
-
 void	threads(t_disp *d)
 {
 	int		i;
 
 	i = 0;
 	clear(d);
+	mlx_put_image_to_window(d[0].mlx, d[0].win, d[0].pic, 0, 0);
 	while (i < NB_THREAD)
 	{
 		if (i != 0)
 			d[i] = d[i - 1];
 		d[i].nb = i;
-		pthread_create(&d[i].th, NULL, (void*)draw, &d[i]);
+		pthread_create(&d[i].th, NULL, (void *)draw, &d[i]);
 		i++;
 	}
 	i = 0;
@@ -234,157 +78,27 @@ void	threads(t_disp *d)
 		pthread_join(d[i].th, NULL);
 		i++;
 	}
-	if (NB_THREAD == 0)
-		draw(d);
 	mlx_put_image_to_window(d[0].mlx, d[0].win, d[0].pic, 0, 0);
 }
 
-void	iter(t_disp *d, int key)
-{
-	if (key == PLUS)
-		d->p.iter += 2;
-	if (key == MINUS)
-		d->p.iter -= 2;
-	threads(d);
-}
-
-void	move(t_disp *d, int key, int x, int y)
-{
-	double		totalx;
-	double		totaly;
-	double		move;
-	
-	if (key == UP || key == DOWN)
-	{
-		totaly = fabs(d->p.ymax) + fabs(d->p.ymin);
-		move = (totaly / 10) * (key == UP ? 1 : -1);
-		d->p.ymax = move + d->p.ymax;
-		d->p.ymin = move + d->p.ymin;
-	}
-	else if (key == LEFT || key == RIGHT)
-	{
-		totalx = fabs(d->p.xmax) + fabs(d->p.xmin);
-		move = (totalx / 10) * (key == LEFT ? -1 : 1);
-		d->p.xmax = move + d->p.xmax;
-		d->p.xmin = move + d->p.xmin;
-	}
-	threads(d);
-}
-
-int		mouse_move(int x, int y, t_disp *d)
-{
-	if (d->lock == 0)
-		d->count++;
-	if (d->choice == JULIA && d->lock == 0 && d->count >= 10)
-	{
-		d->count = 0;
-		d->p.x = 2 * (double)x / WIDTH - 1;
-		d->p.y = 2 * (double)y / HEIGHT - 1;
-		threads(d);
-	}
-	return (0);
-}
-
-void	anime(int key, t_disp *d)
-{
-	int i;
-
-	if (key == W && d->p.mult < 7)
-	{
-		i = d->p.mult + 1;
-		while (d->p.mult < i) {
-			d->p.mult += 0.02;
-			if (d->p.mult > i)
-				d->p.mult = i;
-			threads(d);
-		}
-	} else {
-		i = d->p.mult - 1;
-		while (d->p.mult > i) {
-			d->p.mult -= 0.02;
-			if (d->p.mult < i)
-				d->p.mult = i;
-			threads(d);
-		}
-	}
-}
-
-int		key_press(int key, t_disp *d)
-{
-	if (key == ESC) {
-		printf("SALUT\n");
-		end_program(d);
-	}
-	else if (key == TAB)
-		menu(d);
-	else if (key == SPACE)
-		d->lock = (d->lock == 1 ? 0 : 1);
-	else if (key == UP || key == DOWN || key == RIGHT || key == LEFT)
-		move(d, key, 0, 0);
-	else if ((key == PLUS || key == MINUS) && d->lock == 1)
-		iter(d, key);
-	else if (key == A || key == E)
-	{
-		d->p.iter = 50;
-		if (d->choice > 1 && key == A)
-			d->choice -= 1;
-		if (d->choice < 2 && key == E)
-			d->choice += 1;
-		threads(d);
-	}
-	else if ((d->choice == MANDELBROT) && (key == W || key == X))
-		anime(key, d);
-	return (0);
-}
-
-int		mouse_press(int key, int x, int y, t_disp *d)
-{
-	if (key == WHEELUP || key == WHEELDOWN)
-	{
-		double ratio_x = (int)(((double)x / WIDTH) * 100);
-		double ratio_y = (int)(((double)y / HEIGHT) * 100);
-		double frac_width = distBtwTwoPts(0, d->p.xmax, 0, d->p.xmin);
-		double frac_height = distBtwTwoPts(0, d->p.ymax, 0, d->p.ymin);
-		if (key == WHEELUP)
-		{
-			d->p.xmax -= (frac_width / 2) - ((frac_width / 2) * (d->p.zoom * (ratio_x / 100)));
-			d->p.xmin += (frac_width / 2) - ((frac_width / 2) * (d->p.zoom * ((100 - ratio_x) / 100)));
-			d->p.ymax -= (frac_height / 2) - ((frac_height / 2) * (d->p.zoom * ((100 - ratio_y) / 100)));
-			d->p.ymin += (frac_height / 2) - ((frac_height / 2) * (d->p.zoom * (ratio_y / 100)));
-		}
-		else if (key == WHEELDOWN)
-		{
-			d->p.xmax += (frac_width / 2) - ((frac_width / 2) * (d->p.zoom * (ratio_x / 100)));
-			d->p.xmin -= (frac_width / 2) - ((frac_width / 2) * (d->p.zoom * ((100 - ratio_x) / 100)));
-			d->p.ymax += (frac_height / 2) - ((frac_height / 2) * (d->p.zoom * ((100 - ratio_y) / 100)));
-			d->p.ymin -= (frac_height / 2) - ((frac_height / 2) * (d->p.zoom * (ratio_y / 100)));
-		}
-		threads(d);
-	}
-	return (0);
-}
-
-int		mouse_release(int key, int x, int y, t_disp *d)
-{
-	//	printf("key : [%d]\n", key);
-	return (0);
-}
-
-int		main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_disp		*d;
 	int			i;
 
-	if (argc != 2)
-		exit(printf("Usage : ./fractol [fractal_name]\n"));
-	if ((i = choice(argv)) != 0)
+	error_checker(argc);
+	i = choice(argv);
+	if (i != 0)
 	{
-		if (!(d = (t_disp*)malloc(sizeof(t_disp) * NB_THREAD)))
-			exit(printf("malloc error\n"));
-		init_var(&d[0], i);
+		d = (t_disp *)malloc(sizeof(t_disp) * NB_THREAD);
+		if (!d)
+		{
+			ft_putstr("malloc error\n");
+			exit(0);
+		}
+		init(&d[0], i);
 		threads(d);
 		mlx_hook(d[0].win, 2, 1, key_press, &d[0]);
-		mlx_hook(d[0].win, 5, 1L << 3, mouse_release, &d[0]);
 		mlx_hook(d[0].win, 4, 1L << 2, mouse_press, &d[0]);
 		mlx_hook(d[0].win, 6, 1L << 6, mouse_move, &d[0]);
 		mlx_loop(d[0].mlx);
