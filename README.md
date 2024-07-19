@@ -49,12 +49,8 @@ with fractale_name:
 
 ### Screenshots
 
-Filtering by frequencies (low: 7Hz, high: 30Hz):
+![Picture 1](pic/Screen Shot 2022-01-25 at 5.27.14 PM.png)
 
-![Before filtering](pictures/signal_before.png)
+![Picture 2](pictures/signal_after.png)
 
-![After filtering](pictures/signal_after.png)
-
-Result on records before/after filtering:
-
-![Graphs records](pictures/graph.png)
+![Picture 3](pictures/graph.png)
