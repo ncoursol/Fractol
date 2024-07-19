@@ -49,8 +49,12 @@ with fractale_name:
 
 ### Screenshots
 
-![Picture 1](pic/Screen Shot 2022-01-25 at 5.27.14 PM.png)
+![Picture 1](pic/sreenshot_1.png)
 
-![Picture 2](pictures/signal_after.png)
+![Picture 2](pic/sreenshot_2.png)
 
-![Picture 3](pictures/graph.png)
+![Picture 3](pic/sreenshot_3.png)
+
+![Picture 4](pic/sreenshot_4.png)
+
+![Picture 5](pic/sreenshot_5.png)
