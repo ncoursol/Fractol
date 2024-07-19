@@ -49,12 +49,12 @@ with fractale_name:
 
 ### Screenshots
 
-![Picture 1](pic/sreenshot_1.png)
+![Picture 1](pic/screenshot_1.png)
 
-![Picture 2](pic/sreenshot_2.png)
+![Picture 2](pic/screenshot_2.png)
 
-![Picture 3](pic/sreenshot_3.png)
+![Picture 3](pic/screenshot_3.png)
 
-![Picture 4](pic/sreenshot_4.png)
+![Picture 4](pic/screenshot_4.png)
 
-![Picture 5](pic/sreenshot_5.png)
+![Picture 5](pic/screenshot_5.png)
