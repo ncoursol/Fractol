@@ -1,38 +1,34 @@
-<div>
-  
-</div>
-
 # Fractol
 
 ## Introduction
-Ce projet est une ouverture à la programmation graphique, aux nombres complexes et aux differentes problematiques lier a l'optimisation.
+This project is an introduction to graphical programming, complex numbers, and various optimization issues.
 
 42 subject: [https://cdn.intra.42.fr/pdf/pdf/84885/en.subject.pdf](https://cdn.intra.42.fr/pdf/pdf/1823/fract_ol.fr.pdf)
 
-L'Objectif ici est de creer un petit logiciel d'exploration de fractales sur different sets de fractales tel que Mandelbrot et Julia.
+The goal here is to create a small software application for exploring fractals on different sets of fractals such as Mandelbrot and Julia.
 
 ## Content
-Il est possible d'afficher 4 types de fractales differentes:
+It is possible to display 4 different types of fractals:
   - Julia
   - Mandelbrot
   - Burning Ship
   - Multibrot (Mandelbrot variations)
 
 > [!NOTE]
-> Due aux contraintes materiel et à la complexité accrue, le set Multibrot peut être plus lent que les autres sets disponibles.
+> Due to hardware constraints and increased complexity, the Multibrot set may be slower than the other available sets.
 
-Voici la liste des actions disponible durant le rendu des fractales:
-  - La molette de la souris permet de zoomer et dézoomer, et cela de façon quasi infinie (modulo les limites de la machine).
-  - 'Q', 'E' - changer de set de fractale (voir liste ci-dessus).
+Here is the list of actions available during the rendering of the fractals:
+  - The mouse wheel allows zooming in and out, and this can be done almost infinitely (limited by machine capabilities).
+  - 'Q', 'E' - change the fractal set (see list above).
   - 'Z', 'X' - ...
-  - 'R', 'G', 'B' - changer le colori des fractales (rouge/vert/bleu).
-  - 'UP', 'DOWN', 'LEFT', 'RIGHT' - se déplacer dans la fractale horizontalement et verticalement.
-  - 'W', 'S' - faire varier la couleur suivant un gradiant.
-  - 'A', 'D' - changer le mode de colori.
-  - 'SPACE' - permet de bloquer/débloquer la variation du set (Julia seulement).
-  - '+', '-' - Augmente ou diminue le nombre d'iterations/profondeur de la fractale (Passer un certain ceuil technique, affecte la performance)
-  - 'ECHAP' - Quitte le programme.
-  - 'Z', 'X' - (seulement pour Mandelbrot) permet de passer de Mandelbrot à sa variante multibranches (Multibrot) 'Z' et 'X' permettent de changer le nombre de branches.
+  - 'R', 'G', 'B' - change the color of the fractals (red/green/blue).
+  - 'UP', 'DOWN', 'LEFT', 'RIGHT' - move horizontally and vertically within the fractal.
+  - 'W', 'S' - vary the color according to a gradient.
+  - 'A', 'D' - change the coloring mode.
+  - 'SPACE' - lock/unlock the variation of the set (Julia only).
+  - '+', '-' - Increase or decrease the number of iterations/depth of the fractal (beyond a certain technical threshold, it affects performance).
+  - 'ESC' - Quit the program.
+  - 'Z', 'X' - (only for Mandelbrot) switch from Mandelbrot to its multi-branch variant (Multibrot). 'Z' and 'X' allow changing the number of branches.
 
 ## Run program
 Compile using the Makefile:
