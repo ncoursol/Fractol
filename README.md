@@ -47,7 +47,7 @@ with fractale_name:
 > [!NOTE]
 > For the Multibrot set, you have to select Mandelbrot and change the number of branches with 'Z' and 'X'.
 
-### Screenshots
+## Screenshots
 
 ![Picture 1](pic/screenshot_1.png)
 
